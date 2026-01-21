@@ -1,14 +1,11 @@
 package com.codigenics.ecommerce_app.service;
 
-import com.codigenics.ecommerce_app.enitity.Category;
+import com.codigenics.ecommerce_app.entity.Category;
 import com.codigenics.ecommerce_app.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -18,14 +15,14 @@ public class CategoryServiceImpl implements CategoryService{
     private Category categories;
 
 
-    @Override // getting all categories irrespective of id
+    @Override
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
     @Override
-    public void createCategory(Category category) {
-            categoryRepository.save(category);
+    public Category createCategory(Category category) {
+            return categoryRepository.save(category);
     }
 
     @Override
