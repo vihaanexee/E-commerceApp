@@ -4,10 +4,9 @@ import com.codigenics.ecommerce_app.config.AppConstants;
 import com.codigenics.ecommerce_app.payload.CategoryListResponse;
 import com.codigenics.ecommerce_app.payload.CategoryRequest;
 import com.codigenics.ecommerce_app.payload.CategoryResponse;
-import com.codigenics.ecommerce_app.service.CategoryServiceImpl;
+import com.codigenics.ecommerce_app.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
 
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
 
 //creating categories
     @PostMapping("/createCategory")

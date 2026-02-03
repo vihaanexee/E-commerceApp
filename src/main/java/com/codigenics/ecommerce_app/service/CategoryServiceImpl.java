@@ -28,7 +28,6 @@ public class CategoryServiceImpl implements CategoryService{
     private ModelMapper modelMapper;
     private Category categories;
 
-
     //getting all the requested categories
     @Override
     public CategoryListResponse getAllCategories(Integer pageNumber , Integer pageSize , String sortBy , String sortOrder ) {
