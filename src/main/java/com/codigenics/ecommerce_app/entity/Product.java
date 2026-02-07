@@ -1,11 +1,16 @@
 package com.codigenics.ecommerce_app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DialectOverride;
+import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,9 +20,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Products")
+@Where(clause = "active = true")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
     @Column(nullable = false)
@@ -34,11 +40,13 @@ public class Product {
     @Column(length = 1000)
     private String image;
 
-    @Column(nullable = false)
+    @Column(nullable = false )
+    @Min(0)
     private BigDecimal price;
-
+    @Min(0)
     private BigDecimal specialPrice;
-
+    @Min(0)
+    @NotNull
     private BigDecimal discount;
 
     @ManyToOne
@@ -50,6 +58,10 @@ public class Product {
     private Boolean active = true;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

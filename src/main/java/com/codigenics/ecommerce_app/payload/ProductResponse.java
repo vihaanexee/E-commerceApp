@@ -16,6 +16,7 @@ public class ProductResponse {
     private Integer quantity;
     private BigDecimal price;
     private BigDecimal specialPrice;
+    private String productImage;
     private String message;
     private LocalDateTime createdAt;
 
