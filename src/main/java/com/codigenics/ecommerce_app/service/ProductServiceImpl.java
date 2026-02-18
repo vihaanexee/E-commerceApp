@@ -47,19 +47,31 @@ public class ProductServiceImpl implements ProductService{
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category" , "categoryId" ,categoryId ));
 
-        Product product = modelMapper.map(productRequest , Product.class);
-        product.setImage("default.img");
-        product.setCategory(category);
+        boolean isProductNotPresent = true;
+        List<Product> products = category.getProducts();
+        for (Product value : products) {
+            if (value.getProductName().equals(productRequest.getProductName())){
+                isProductNotPresent = false;
+                break;
+            }
+        }
+        if (isProductNotPresent) {
+            Product product = modelMapper.map(productRequest, Product.class);
+            product.setImage("default.img");
+            product.setCategory(category);
 
-        BigDecimal discountPercent = product.getDiscount().divide(new BigDecimal(100) ,2 , RoundingMode.HALF_UP);
-        BigDecimal discountAmount = product.getPrice().multiply(discountPercent);
-        BigDecimal specialPrice = product.getPrice().subtract(discountAmount);
+            BigDecimal discountPercent = product.getDiscount().divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
+            BigDecimal discountAmount = product.getPrice().multiply(discountPercent);
+            BigDecimal specialPrice = product.getPrice().subtract(discountAmount);
 
 
-        product.setSpecialPrice(specialPrice);
+            product.setSpecialPrice(specialPrice);
 
-        Product savedProduct = productRepository.save(product);
-        return modelMapper.map(savedProduct , ProductResponse.class);
+            Product savedProduct = productRepository.save(product);
+            return modelMapper.map(savedProduct, ProductResponse.class);
+        }else {
+            throw new APIException("Product is already present");
+        }
     }
 
 
@@ -97,10 +109,10 @@ public class ProductServiceImpl implements ProductService{
         Page<Product> productsPage = productRepository.findByCategory(category , pageDetails);
 
 
-        List<ProductResponse> productRespones = productsPage.stream().map(product -> modelMapper.map(product , ProductResponse.class)).toList();
+        List<ProductResponse> productResponses = productsPage.stream().map(product -> modelMapper.map(product , ProductResponse.class)).toList();
 
         ProductResponseList productResponseList = new ProductResponseList();
-        productResponseList.setContent(productRespones);
+        productResponseList.setContent(productResponses);
         productResponseList.setPageNumber(productsPage.getNumber());
         productResponseList.setPageSize(productsPage.getSize());
         productResponseList.setTotalElements(productsPage.getTotalElements());

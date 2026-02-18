@@ -2,11 +2,13 @@ package com.codigenics.ecommerce_app.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DialectOverride;
 import org.hibernate.annotations.Where;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Table(name = "Products")
 @Where(clause = "active = true")
 public class Product {
@@ -27,7 +30,7 @@ public class Product {
     private Long productId;
 
     @Column(nullable = false)
-    @Size(min = 3 , max = 500)
+    @Size(min = 3 , max = 500 , message = "Product name must contain atleast 3 characters")
     private String productName;
 
     @Column(nullable = false)
@@ -40,7 +43,7 @@ public class Product {
     @Column(length = 1000)
     private String image;
 
-    @Column(nullable = false )
+    @NotNull
     @Min(0)
     private BigDecimal price;
     @Min(0)
@@ -48,11 +51,6 @@ public class Product {
     @Min(0)
     @NotNull
     private BigDecimal discount;
-
-    @ManyToOne
-    @JoinColumn(name = "category_Id")
-    private Category category;
-
 
     @Column(nullable = false)
     private Boolean active = true;
@@ -64,4 +62,14 @@ public class Product {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "category_Id")
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private User users;
+
+
 }

@@ -14,15 +14,18 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
     @Override
     public String uploadImage(String path, MultipartFile file) throws IOException {
-
+//Getting the original file name as uploaded by the user
         String ogFileName = file.getOriginalFilename();
-        //make sure the path is png or jpeg and not any sh file or something
+
+        //Getting the file extension to check if it is png of jpg or jpeg
         String extension = ogFileName.substring(ogFileName.lastIndexOf(".")).toLowerCase();
         if (!extension.equals(".png") && !extension.equals(".jpg") && !extension.equals(".jpeg")){
             throw new APIException("Only PNG and JPEG files are allowed");
         }
-
+        //Generating a Unique id for the image
         String randomId = UUID.randomUUID().toString();
+
+        //add the extension to the unique id
         String fileName = randomId.concat(extension);
 
         String filePath = path + File.separator + fileName;
